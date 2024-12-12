@@ -4,11 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import repick.chatbotapi.Dto.ChatBotMessageDto;
 import repick.chatbotapi.domain.ChatBotMessage;
 import repick.chatbotapi.domain.ChatBotRoom;
 import repick.chatbotapi.repository.ChatBotMessageRepository;
+import repick.chatbotapi.response.ChatBotMessageResponse;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +22,12 @@ public class ChatBotMessageServiceImpl implements ChatBotMessageService {
     private WebClient.Builder webClientBuilder;
 
     private final ChatBotMessageRepository chatBotMessageRepository;
+
+    @Override
+    public List<ChatBotMessageResponse> getAllByChatRoomId(Long chatRoomId) {
+        List<ChatBotMessage> messages = chatBotMessageRepository.findByChatBotRoomId(chatRoomId);
+        return messages.stream().map(ChatBotMessageResponse::from).collect(Collectors.toList());
+    }
 
     @Override
     public ChatBotMessage sendChatBotMessageAndSave(ChatBotRoom chatBotRoom, String request) {

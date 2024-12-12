@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import repick.chatbotapi.domain.ChatBotRoom;
 import repick.chatbotapi.repository.ChatBotRoomRepository;
+import repick.chatbotapi.response.ChatBotMessageResponse;
+import repick.chatbotapi.response.ChatBotRoomResponse;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +25,8 @@ public class ChatBotRoomServiceImpl implements ChatBotRoomService {
     private String jwtSecretKey;
 
     @Override
-    public Long userIdFromToken(String token) {
+    public Long userIdFromToken(String bearerToken) {
+        String token = bearerToken.substring(7);
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecretKey)
                 .parseClaimsJws(token)
@@ -37,5 +42,16 @@ public class ChatBotRoomServiceImpl implements ChatBotRoomService {
     @Override
     public ChatBotRoom findUUIDChatBotRoom(UUID uuid) {
         return chatBotRoomRepository.findByUuid(uuid);
+    }
+
+    @Override
+    public Long findIdUUID(UUID uuid) {
+        return chatBotRoomRepository.findIdByUuid(uuid);
+    }
+
+    @Override
+    public List<ChatBotRoomResponse> findUserId(Long id) {
+        List<ChatBotRoom> chatBotRooms = chatBotRoomRepository.findByOwnerId(id);
+        return chatBotRooms.stream().map(ChatBotRoomResponse::from).collect(Collectors.toList());
     }
 }

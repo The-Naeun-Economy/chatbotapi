@@ -23,7 +23,7 @@ public class ChatBotMessage {
     @Column(columnDefinition = "TEXT")
     private String response;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_bot_room_id")
     private ChatBotRoom chatBotRoom;
 }
