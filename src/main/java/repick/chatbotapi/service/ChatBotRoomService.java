@@ -1,5 +1,6 @@
 package repick.chatbotapi.service;
 
+import org.springframework.data.domain.Page;
 import repick.chatbotapi.domain.ChatBotRoom;
 import repick.chatbotapi.response.ChatBotRoomResponse;
 
@@ -11,5 +12,5 @@ public interface ChatBotRoomService {
     void createChatBotRoom(ChatBotRoom chatBotRoom);
     ChatBotRoom findUUIDChatBotRoom(UUID uuid);
     Long findIdUUID(UUID uuid);
-    List<ChatBotRoomResponse> findUserId(Long id);
+    Page<ChatBotRoomResponse> findUserId(Long id, int page, int size);
 }

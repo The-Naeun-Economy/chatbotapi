@@ -3,6 +3,7 @@ package repick.chatbotapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import repick.chatbotapi.Request.ChatBotMessageRequest;
 import repick.chatbotapi.Request.ChatBotRoomRequest;
@@ -29,11 +30,13 @@ public class ChatBotRoomController {
     private ObjectMapper objectMapper;
 
     @GetMapping
-    public List<ChatBotRoomResponse> getChatBotRoomsByUserId(
-            @RequestHeader String Authorization
+    public Page<ChatBotRoomResponse> getChatBotRoomsByUserId(
+            @RequestHeader String Authorization,
+            @RequestParam int page,
+            @RequestParam int size
     ) {
         Long userId = chatBotRoomService.userIdFromToken(Authorization);
-        return chatBotRoomService.findUserId(userId);
+        return chatBotRoomService.findUserId(userId, page, size);
     }
 
     @GetMapping("/{uuid}")

@@ -8,8 +8,10 @@ import repick.chatbotapi.Dto.ChatBotMessageDto;
 import repick.chatbotapi.domain.ChatBotMessage;
 import repick.chatbotapi.domain.ChatBotRoom;
 import repick.chatbotapi.repository.ChatBotMessageRepository;
+import repick.chatbotapi.repository.ChatBotRoomRepository;
 import repick.chatbotapi.response.ChatBotMessageResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,6 +23,7 @@ public class ChatBotMessageServiceImpl implements ChatBotMessageService {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
+    private final ChatBotRoomRepository chatBotRoomRepository;
     private final ChatBotMessageRepository chatBotMessageRepository;
 
     @Override
@@ -44,6 +47,7 @@ public class ChatBotMessageServiceImpl implements ChatBotMessageService {
                 .request(request)
                 .response(response)
                 .build();
+        chatBotRoomRepository.updateLastModified(chatBotRoom.getUuid(),LocalDateTime.now());
         return chatBotMessageRepository.save(chatBotMessage);
     }
 }

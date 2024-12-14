@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import repick.chatbotapi.config.CreateTImeEntity;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ public class ChatBotRoom {
     private UUID uuid;
     private String title;
     private Long ownerId;
+    private LocalDateTime lastModified;
 
     @OneToMany(mappedBy = "chatBotRoom")
     private Set<ChatBotMessage> messages;

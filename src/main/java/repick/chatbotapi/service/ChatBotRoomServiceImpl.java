@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import repick.chatbotapi.domain.ChatBotRoom;
@@ -50,8 +52,8 @@ public class ChatBotRoomServiceImpl implements ChatBotRoomService {
     }
 
     @Override
-    public List<ChatBotRoomResponse> findUserId(Long id) {
-        List<ChatBotRoom> chatBotRooms = chatBotRoomRepository.findByOwnerId(id);
-        return chatBotRooms.stream().map(ChatBotRoomResponse::from).collect(Collectors.toList());
+    public Page<ChatBotRoomResponse> findUserId(Long id, int page, int size) {
+        Page<ChatBotRoom> chatBotRooms = chatBotRoomRepository.findByOwnerId(id, PageRequest.of(page, size));
+        return chatBotRooms.map(ChatBotRoomResponse::from);
     }
 }
