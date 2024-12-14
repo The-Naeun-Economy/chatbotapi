@@ -20,7 +20,7 @@ public interface ChatBotRoomRepository extends JpaRepository<ChatBotRoom, Long> 
     @Query("select r.id from ChatBotRoom r where r.uuid = :uuid")
     Long findIdByUuid(@Param("uuid") UUID uuid);
 
-    @Query("select r from ChatBotRoom r where r.ownerId = : ownerId order by r.lastModified DESC")
+    @Query("select r from ChatBotRoom r where r.ownerId = :ownerId order by r.lastModified DESC")
     Page<ChatBotRoom> findByOwnerId(@Param("ownerId") Long ownerId, Pageable pageable);
 
     @Modifying
