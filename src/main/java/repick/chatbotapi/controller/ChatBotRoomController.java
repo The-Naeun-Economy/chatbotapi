@@ -39,10 +39,22 @@ public class ChatBotRoomController {
         return chatBotRoomService.findUserId(userId, page, size);
     }
 
-    @GetMapping("/{uuid}")
-    public List<ChatBotMessageResponse> getUUIDChatBotRoom(@PathVariable String uuid) {
+    @DeleteMapping("/{uuid}")
+    public String deleteChatBotRoom(@PathVariable String uuid) {
         Long chatRoomId = chatBotRoomService.findIdUUID(UUID.fromString(uuid));
-        return chatBotMessageService.getAllByChatRoomId(chatRoomId);
+        chatBotMessageService.deleteChatBotMessages(chatRoomId);
+        chatBotRoomService.deleteChatBotRoom(chatRoomId);
+        return "success";
+    }
+
+    @GetMapping("/{uuid}")
+    public Page<ChatBotMessageResponse> getUUIDChatBotRoom(
+            @PathVariable String uuid,
+            @RequestParam int page,
+            @RequestParam int size
+    ) {
+        Long chatRoomId = chatBotRoomService.findIdUUID(UUID.fromString(uuid));
+        return chatBotMessageService.getAllByChatRoomId(chatRoomId, page, size);
     }
 
     @PostMapping

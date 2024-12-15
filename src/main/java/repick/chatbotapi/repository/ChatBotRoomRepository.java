@@ -27,4 +27,8 @@ public interface ChatBotRoomRepository extends JpaRepository<ChatBotRoom, Long> 
     @Query("UPDATE ChatBotRoom r SET r.lastModified = :lastModified WHERE r.uuid = :uuid")
     void updateLastModified(@Param("uuid") UUID uuid, @Param("lastModified") LocalDateTime lastModified);
 
+    @Modifying
+    @Query("DELETE FROM ChatBotRoom c WHERE c.id = :id")
+    void deleteByChatBotRoomId(@Param("id") Long id);
+
 }

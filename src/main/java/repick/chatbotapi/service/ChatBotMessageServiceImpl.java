@@ -3,6 +3,8 @@ package repick.chatbotapi.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import repick.chatbotapi.Dto.ChatBotMessageDto;
@@ -29,9 +31,9 @@ public class ChatBotMessageServiceImpl implements ChatBotMessageService {
     private final ChatBotMessageRepository chatBotMessageRepository;
 
     @Override
-    public List<ChatBotMessageResponse> getAllByChatRoomId(Long chatRoomId) {
-        List<ChatBotMessage> messages = chatBotMessageRepository.findByChatBotRoomId(chatRoomId);
-        return messages.stream().map(ChatBotMessageResponse::from).collect(Collectors.toList());
+    public Page<ChatBotMessageResponse> getAllByChatRoomId(Long chatRoomId, int page, int size) {
+        Page<ChatBotMessage> messages = chatBotMessageRepository.findByChatBotRoomId(chatRoomId, PageRequest.of(page, size));
+        return messages.map(ChatBotMessageResponse::from);
     }
 
     @Override
@@ -51,5 +53,10 @@ public class ChatBotMessageServiceImpl implements ChatBotMessageService {
                 .build();
         chatBotRoomRepository.updateLastModified(chatBotRoom.getUuid(),LocalDateTime.now());
         return chatBotMessageRepository.save(chatBotMessage);
+    }
+
+    @Override
+    public void deleteChatBotMessages(Long id) {
+        chatBotMessageRepository.deleteByChatBotRoomId(id);
     }
 }

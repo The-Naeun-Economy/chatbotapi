@@ -13,4 +13,5 @@ public interface ChatBotRoomService {
     ChatBotRoom findUUIDChatBotRoom(UUID uuid);
     Long findIdUUID(UUID uuid);
     Page<ChatBotRoomResponse> findUserId(Long id, int page, int size);
+    void deleteChatBotRoom(Long id);
 }

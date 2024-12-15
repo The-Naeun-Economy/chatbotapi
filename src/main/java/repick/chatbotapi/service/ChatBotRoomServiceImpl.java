@@ -2,6 +2,7 @@ package repick.chatbotapi.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ChatBotRoomServiceImpl implements ChatBotRoomService {
 
@@ -55,5 +57,10 @@ public class ChatBotRoomServiceImpl implements ChatBotRoomService {
     public Page<ChatBotRoomResponse> findUserId(Long id, int page, int size) {
         Page<ChatBotRoom> chatBotRooms = chatBotRoomRepository.findByOwnerId(id, PageRequest.of(page, size));
         return chatBotRooms.map(ChatBotRoomResponse::from);
+    }
+
+    @Override
+    public void deleteChatBotRoom(Long id) {
+        chatBotRoomRepository.deleteByChatBotRoomId(id);
     }
 }
