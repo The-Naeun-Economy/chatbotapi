@@ -16,6 +16,7 @@ import repick.chatbotapi.service.ChatBotRoomService;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @CrossOrigin("*")
 @RestController
@@ -74,5 +75,12 @@ public class ChatBotRoomController {
         String request = chatBotMessageRequest.getMessage();
         ChatBotMessage chatBotMessage = chatBotMessageService.sendChatBotMessageAndSave(chatBotRoom, request);
         return ChatBotMessageResponse.from(chatBotMessage);
+    }
+
+    @PostMapping("/message/{uuid}/async")
+    public CompletableFuture<ChatBotMessageResponse> llmMessageAsync(@PathVariable String uuid, @RequestBody ChatBotMessageRequest chatBotMessageRequest) {
+        ChatBotRoom chatBotRoom = chatBotRoomService.findUUIDChatBotRoom(UUID.fromString(uuid));
+        String request = chatBotMessageRequest.getMessage();
+        return chatBotMessageService.sendChatBotMessageAndSaveAsync(chatBotRoom, request).thenApply(ChatBotMessageResponse::from);
     }
 }
