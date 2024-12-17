@@ -83,4 +83,11 @@ public class ChatBotRoomController {
         String request = chatBotMessageRequest.getMessage();
         return chatBotMessageService.sendChatBotMessageAndSaveAsync(chatBotRoom, request).thenApply(ChatBotMessageResponse::from);
     }
+
+    @PostMapping("/message/{uuid}/asyncec2")
+    public CompletableFuture<ChatBotMessageResponse> llmMessageAsyncEc2(@PathVariable String uuid, @RequestBody ChatBotMessageRequest chatBotMessageRequest) {
+        ChatBotRoom chatBotRoom = chatBotRoomService.findUUIDChatBotRoom(UUID.fromString(uuid));
+        String request = chatBotMessageRequest.getMessage();
+        return chatBotMessageService.sendChatBotMessageAndSaveAsyncEc2(chatBotRoom, request).thenApply(ChatBotMessageResponse::from);
+    }
 }
